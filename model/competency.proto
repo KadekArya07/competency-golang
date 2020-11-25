@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package model;
+
+option go_package = "competency/model";
+
+message Competencies{
+    string Id = 1;
+    string code = 2;
+    string name = 3;
+}
+
+message CompetencyList{
+    repeated Competencies ListCompetency = 1;
+}
+
+message JobId{
+    string Id = 1;
+}
+
+message Jobs {
+    string id = 1;
+    string code = 2;
+    string name = 3;
+    string description = 4;
+}
+message Job {
+    string code = 2;
+    string name = 3;
+    string description = 4;
+}
+message JobList {
+    repeated Jobs Job = 1;
+}
+
+message Response {
+     string code = 1;
+     string message =2;
+}
+
+message Empty{}
+
+service CompetencyService{
+    rpc GetAllCompetency(Empty) returns (CompetencyList);
+    rpc DeleteJobById(JobId) returns (Response);
+}
+
+service JobService{
+    rpc GetAllJob(Empty) returns(JobList);
+    rpc AddJob(Job) returns (Response);
+    rpc GetByIdJob(JobId) returns(Jobs);
+}
