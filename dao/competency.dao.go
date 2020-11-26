@@ -3,6 +3,7 @@ package dao
 import (
 	"competency/config"
 	"competency/model"
+	"log"
 	"strings"
 
 	"gorm.io/gorm"
@@ -10,6 +11,15 @@ import (
 
 type CompetencyDao struct{}
 
+func (CompetencyDao) GetById(id string) (data model.Competency, e error) {
+	defer config.CatchError(&e)
+	var competency model.Competency
+	result := g.Preload("LovCompetency").Find(&competency)
+	if result.Error == nil {
+		return competency, nil
+	}
+	return data, result.Error
+}
 func (CompetencyDao) AddCompetency(competency *model.Competency, tx *gorm.DB) (e error) {
 	defer config.CatchError(&e)
 	result := tx.Create(competency)
@@ -86,4 +96,27 @@ func (CompetencyDao) GetCountCompetency(page int, limit int, inquiry string) (co
 	defer rows.Close()
 
 	return count, err
+}
+
+func (CompetencyDao) GetCompetencyById(id *model.CompId) (competency model.Competency, e error) {
+	defer config.CatchError(&e)
+	var competencies = model.Competency{}
+	result := g.Where("id = ?", id.Id).Find(&competencies)
+	log.Print(result)
+	if result.Error == nil {
+		return competencies, nil
+	}
+
+	return competencies, result.Error
+}
+
+func (CompetencyDao) GetAllCompetency() (listCompetency []model.Competency, e error) {
+	defer config.CatchError(&e)
+	var competencies = []model.Competency{}
+	result := g.Find(&competencies)
+	if result.Error == nil {
+		return competencies, nil
+	}
+
+	return competencies, result.Error
 }

@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 type CompetencyServiceClient interface {
 	GetAllCompetency(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CompetencyList, error)
 	DeleteJobById(ctx context.Context, in *JobId, opts ...grpc.CallOption) (*Response, error)
+	GetCompetencyById(ctx context.Context, in *CompId, opts ...grpc.CallOption) (*Competencies, error)
 }
 
 type competencyServiceClient struct {
@@ -47,12 +48,22 @@ func (c *competencyServiceClient) DeleteJobById(ctx context.Context, in *JobId, 
 	return out, nil
 }
 
+func (c *competencyServiceClient) GetCompetencyById(ctx context.Context, in *CompId, opts ...grpc.CallOption) (*Competencies, error) {
+	out := new(Competencies)
+	err := c.cc.Invoke(ctx, "/model.CompetencyService/GetCompetencyById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CompetencyServiceServer is the server API for CompetencyService service.
 // All implementations must embed UnimplementedCompetencyServiceServer
 // for forward compatibility
 type CompetencyServiceServer interface {
 	GetAllCompetency(context.Context, *Empty) (*CompetencyList, error)
 	DeleteJobById(context.Context, *JobId) (*Response, error)
+	GetCompetencyById(context.Context, *CompId) (*Competencies, error)
 	mustEmbedUnimplementedCompetencyServiceServer()
 }
 
@@ -65,6 +76,9 @@ func (UnimplementedCompetencyServiceServer) GetAllCompetency(context.Context, *E
 }
 func (UnimplementedCompetencyServiceServer) DeleteJobById(context.Context, *JobId) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteJobById not implemented")
+}
+func (UnimplementedCompetencyServiceServer) GetCompetencyById(context.Context, *CompId) (*Competencies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCompetencyById not implemented")
 }
 func (UnimplementedCompetencyServiceServer) mustEmbedUnimplementedCompetencyServiceServer() {}
 
@@ -115,6 +129,24 @@ func _CompetencyService_DeleteJobById_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CompetencyService_GetCompetencyById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CompetencyServiceServer).GetCompetencyById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/model.CompetencyService/GetCompetencyById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CompetencyServiceServer).GetCompetencyById(ctx, req.(*CompId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CompetencyService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "model.CompetencyService",
 	HandlerType: (*CompetencyServiceServer)(nil),
@@ -126,6 +158,10 @@ var _CompetencyService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteJobById",
 			Handler:    _CompetencyService_DeleteJobById_Handler,
+		},
+		{
+			MethodName: "GetCompetencyById",
+			Handler:    _CompetencyService_GetCompetencyById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

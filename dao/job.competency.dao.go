@@ -17,11 +17,12 @@ func (JobCompetencyDao) GetByJobId(id string) (data []model.JobCompetency, e err
 	return nil, result.Error
 }
 
-func (JobCompetencyDao) DeleteByJobId(id *model.JobId) (e error) {
+func (JobCompetencyDao) DeleteByJobId(id string) (e error) {
 	defer config.CatchError(&e)
-	result := g.Where("job_id = ?", id).Delete(model.JobCompetency{})
+	result := g.Where("id = ?", id).Delete(model.JobCompetency{})
 	if result.Error == nil {
 		return nil
 	}
+
 	return result.Error
 }

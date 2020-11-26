@@ -7,7 +7,9 @@ import (
 	"competency/pojo"
 )
 
-type CompetencyLovService struct{}
+type CompetencyLovService struct {
+	model.UnimplementedCompetencyServiceServer
+}
 
 var comptencyLovDao = dao.CompetencyLovDao{}
 

@@ -5,12 +5,14 @@ import (
 	"competency/dao"
 	"competency/model"
 	"competency/pojo"
+	"context"
 	"log"
 
 	"gorm.io/gorm"
 )
 
-type CompetencyService struct{}
+type CompetencyService struct {
+}
 
 var competencyDao = dao.CompetencyDao{}
 var behaviourService = BehaviourService{}
@@ -74,7 +76,7 @@ func (CompetencyService) AddCompetency(pojoCompetency *pojo.PojoCompetency) (e e
 	})
 }
 
-func (CompetencyService) GetAllCompetency(page int, limit int) (pojoPagination pojo.PojoPagination, e error) {
+func (CompetencyService) GetListCompetency(page int, limit int) (pojoPagination pojo.PojoPagination, e error) {
 	defer config.CatchError(&e)
 
 	var listCompetency, err = competencyDao.GetCompetency(page, limit, "")
@@ -108,7 +110,58 @@ func (CompetencyService) GetCompetencyBySearch(page int, limit int, inquiry stri
 	return pojoPagination, nil
 }
 
-func (CompetencyService) GetCompetencyByJobId() (e error) {
+func (CompetencyService) GetCompetencyById(ctx context.Context, models *model.CompId) (competency *model.Competencies, e error) {
 	defer config.CatchError(&e)
-	return nil
+	result, err := competencyDao.GetCompetencyById(models)
+	if err != nil {
+		return competency, err
+	}
+	return &model.Competencies{
+		Id:   *&result.Id,
+		Code: *&result.Code,
+		Name: *&result.Name,
+	}, nil
+}
+
+func (CompetencyService) GetAllCompetency(ctx context.Context, models *model.Empty) (listCompetency *model.CompetencyList, e error) {
+	defer config.CatchError(&e)
+	result, err := competencyDao.GetAllCompetency()
+	listComp := []*model.Competencies{}
+	if err != nil {
+		return nil, err
+	}
+	for _, v := range result {
+		listComp = append(listComp, &model.Competencies{
+			Id:   v.Id,
+			Code: v.Code,
+			Name: v.Name,
+		})
+	}
+	listCompetency.ListCompetency = listComp
+	return listCompetency, nil
+}
+
+func (CompetencyService) GetById(id string) (listData pojo.PojoCompetency, e error) {
+	defer config.CatchError(&e)
+	var pojoCompetency pojo.PojoCompetency
+	result, err := competencyDao.GetById(id)
+	log.Print(result)
+	if err == nil {
+		if result.Id != "" {
+			pojoCompetency.Competency = result
+			return pojoCompetency, nil
+		}
+	}
+	return pojoCompetency, err
+}
+
+func (CompetencyService) GetCompetencyDetail(pojoCompetency pojo.PojoCompetency) (listData pojo.PojoCompetency) {
+	id := pojoCompetency.Competency.Id
+
+	listBehave, err := behaviourService.GetBehaviourByCompId(id)
+	if err != nil {
+		panic(err)
+	}
+	log.Print(listBehave)
+	return pojo.PojoCompetency{}
 }

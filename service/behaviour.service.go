@@ -16,3 +16,8 @@ func (BehaviourService) AddBehaviour(behaviour *model.Behaviour, tx *gorm.DB) (e
 	defer config.CatchError(&e)
 	return behaviourDao.AddBehaviour(behaviour, tx)
 }
+
+func (BehaviourService) GetBehaviourByCompId(compId string) (listBehaviour []model.Behaviour, e error) {
+	defer config.CatchError(&e)
+	return behaviourDao.GetBehaviourByCompId(compId)
+}

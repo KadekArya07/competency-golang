@@ -17,3 +17,13 @@ func (BehaviourDao) AddBehaviour(behaviour *model.Behaviour, tx *gorm.DB) (e err
 	}
 	return result.Error
 }
+
+func (BehaviourDao) GetBehaviourByCompId(compId string) (listBehaviour []model.Behaviour, e error) {
+	defer config.CatchError(&e)
+	listBehaviour = []model.Behaviour{}
+	result := g.Where("comp_id = ? ", compId).Find(&listBehaviour)
+	if result.Error == nil {
+		return listBehaviour, nil
+	}
+	return listBehaviour, result.Error
+}

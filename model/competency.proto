@@ -18,6 +18,10 @@ message JobId{
     string Id = 1;
 }
 
+message CompId{
+    string Id = 1;
+}
+
 message Jobs {
     string id = 1;
     string code = 2;
@@ -43,6 +47,7 @@ message Empty{}
 service CompetencyService{
     rpc GetAllCompetency(Empty) returns (CompetencyList);
     rpc DeleteJobById(JobId) returns (Response);
+    rpc GetCompetencyById(CompId) returns (Competencies);
 }
 
 service JobService{

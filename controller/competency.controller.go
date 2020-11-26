@@ -12,6 +12,7 @@ func SetCompetency(e *echo.Group) {
 	e.POST("/competencies", addCompetency)
 	e.GET("/competencies", getCompetency)
 	e.GET("/competencies/search", getCompetencyBySearch)
+	e.GET("/competencies/detail/:id", getCompetencyById)
 }
 
 var competencyService = service.CompetencyService{}
@@ -33,7 +34,7 @@ func addCompetency(c echo.Context) (e error) {
 
 func getCompetency(c echo.Context) (e error) {
 	defer config.CatchError(&e)
-	list, err := competencyService.GetAllCompetency(convInt(c.QueryParam("page")),
+	list, err := competencyService.GetListCompetency(convInt(c.QueryParam("page")),
 		convInt(c.QueryParam("limit")))
 	if err != nil {
 		return resErr(c, err)
@@ -45,6 +46,15 @@ func getCompetencyBySearch(c echo.Context) (e error) {
 	defer config.CatchError(&e)
 	list, err := competencyService.GetCompetencyBySearch(convInt(c.QueryParam("page")),
 		convInt(c.QueryParam("limit")), c.QueryParam("inquiry"))
+	if err != nil {
+		return resErr(c, err)
+	}
+	return res(c, list)
+}
+
+func getCompetencyById(c echo.Context) (e error) {
+	defer config.CatchError(&e)
+	list, err := competencyService.GetById(c.Param("id"))
 	if err != nil {
 		return resErr(c, err)
 	}

@@ -12,3 +12,5 @@ var baseDao = dao.BaseDao{}
 func SetService(gDB *gorm.DB) {
 	g = gDB
 }
+
+
