@@ -19,3 +19,8 @@ func (JobCompetencyService) GetByJobId(id string) (data []model.JobCompetency, e
 func (JobCompetencyService) DeleteJobById(jobId string) error {
 	return jobCompetencyDao.DeleteByJobId(jobId)
 }
+
+func (JobCompetencyService) GetCompetencyByJobId(id string) (data []model.JobCompetency, e error) {
+	defer config.CatchError(&e)
+	return jobCompetencyDao.GetByJobId(id)
+}

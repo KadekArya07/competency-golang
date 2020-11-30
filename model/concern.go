@@ -3,7 +3,7 @@ package model
 type Concern struct {
 	BaseModel
 	CompetencyID string     `json:"competencyId" gorm:"column:comp_id"`
-	Competency   Competency `json:"competency" gorm:"foreignKey:CompetencyID"`
+	Competency   Competency `json:"-" gorm:"foreignKey:CompetencyID"`
 	Concern      string     `json:"concern" gorm:"column:concern"`
 }
 

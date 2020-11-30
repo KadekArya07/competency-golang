@@ -14,7 +14,7 @@ type CompetencyDao struct{}
 func (CompetencyDao) GetById(id string) (data model.Competency, e error) {
 	defer config.CatchError(&e)
 	var competency model.Competency
-	result := g.Preload("LovCompetency").Find(&competency)
+	result := g.Where("id = ? ", id).Preload("LovCompetency").Find(&competency)
 	if result.Error == nil {
 		return competency, nil
 	}
@@ -98,10 +98,10 @@ func (CompetencyDao) GetCountCompetency(page int, limit int, inquiry string) (co
 	return count, err
 }
 
-func (CompetencyDao) GetCompetencyById(id *model.CompId) (competency model.Competency, e error) {
+func (CompetencyDao) GetCompetencyById(id string) (competency model.Competency, e error) {
 	defer config.CatchError(&e)
 	var competencies = model.Competency{}
-	result := g.Where("id = ?", id.Id).Find(&competencies)
+	result := g.Where("id = ?", id).Find(&competencies)
 	log.Print(result)
 	if result.Error == nil {
 		return competencies, nil

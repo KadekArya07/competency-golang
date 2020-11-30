@@ -3,7 +3,7 @@ package model
 type NonTraining struct {
 	BaseModel
 	CompetencyID string     `json:"competencyId" gorm:"column:comp_id"`
-	Competency   Competency `json:"competency" gorm:"foreignKey:CompetencyID"`
+	Competency   Competency `json:"-" gorm:"foreignKey:CompetencyID"`
 	NonTraining  string     `json:"non_training" gorm:"column:non_training"`
 }
 

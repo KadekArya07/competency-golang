@@ -15,10 +15,10 @@ func (CompetencyLovDao) GetAllCompetencyLov() (listCompetencyLov []pojo.PojoLov,
 	sb.WriteString("FROM cmp_lovs ")
 
 	rows, err := g.Raw(sb.String()).Rows()
-
+	listCompetencyLov = []pojo.PojoLov{}
 	for rows.Next() {
-		listCompetencyLov = []pojo.PojoLov{}
-		pojoLov := pojo.PojoLov{}
+
+		var pojoLov = pojo.PojoLov{}
 		var key string
 		var val string
 

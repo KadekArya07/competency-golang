@@ -4,6 +4,7 @@ import (
 	"competency/config"
 	"competency/model"
 	"competency/pojo"
+	pb "competency/proto/model"
 	"encoding/json"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ type JobService struct{}
 
 var jobCompetencyService = JobCompetencyService{}
 
-func (JobService) GetAllJob() (data []*model.Jobs, e error) {
+func (JobService) GetAllJob() (data []*pb.Jobs, e error) {
 	defer config.CatchError(&e)
 	res, err := config.JobClient.GetAllJob(config.Ctx, &config.Empty)
 	if err != nil {
@@ -24,7 +25,7 @@ func (JobService) GetAllJob() (data []*model.Jobs, e error) {
 
 func (JobService) GetJobById(id string) (data interface{}, e error) {
 	defer config.CatchError(&e)
-	res, err := config.JobClient.GetByIdJob(config.Ctx, &model.JobId{Id: id})
+	res, err := config.JobClient.GetByIdJob(config.Ctx, &pb.JobId{Id: id})
 	if err != nil {
 		panic(err)
 	}

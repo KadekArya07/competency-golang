@@ -5,10 +5,11 @@ import (
 	"competency/dao"
 	"competency/model"
 	"competency/pojo"
+	pb "competency/proto/model"
 )
 
 type CompetencyLovService struct {
-	model.UnimplementedCompetencyServiceServer
+	pb.UnimplementedCompetencyServiceServer
 }
 
 var comptencyLovDao = dao.CompetencyLovDao{}

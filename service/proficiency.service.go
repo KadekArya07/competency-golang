@@ -16,3 +16,8 @@ func (ProficiencyService) AddProficiency(proficiency *model.Proficiency, tx *gor
 	defer config.CatchError(&e)
 	return proficiencyDao.AddProficiency(proficiency, tx)
 }
+
+func (ProficiencyService) GetProficienyByBehaveId(id string) (data []model.Proficiency, e error) {
+	defer config.CatchError(&e)
+	return proficiencyDao.GetProficiencyByBehaveId(id)
+}

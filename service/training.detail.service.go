@@ -16,3 +16,5 @@ func (TrainingDetailService) AddTrainingDetail(data *model.TrainingDetail, tx *g
 	defer config.CatchError(&e)
 	return trainingDetailDao.AddTrainingDetail(data, tx)
 }
+
+// func ()

@@ -16,3 +16,8 @@ func (NonTrainingService) AddTraining(data *model.NonTraining, tx *gorm.DB) (e e
 	defer config.CatchError(&e)
 	return nonTrainingDao.AddNonTraining(data, tx)
 }
+
+func (NonTrainingService) GetNonTrainingByCompId(id string) (data []model.NonTraining, e error) {
+	defer config.CatchError(&e)
+	return nonTrainingDao.GetNonTrainingByCompId(id)
+}

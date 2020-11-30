@@ -18,12 +18,18 @@ func main() {
 
 	dao.SetDao(g)
 	go server.SetProto()
+	go config.ConnectedCredential()
+	go config.ConnectedJobService()
+	go config.ConnectedEmployeeService()
+	e.Use(config.MiddlewareCredential)
+
 	service.SetService(g)
-	config.Connected()
+
 	controller.SetInit(e)
 	controller.SetCompetency(url)
 	controller.SetLov(url)
 	controller.SetJob(url)
+	controller.SetEmployee(url)
 	e.Logger.Fatal(e.Start(":1234"))
 }
 

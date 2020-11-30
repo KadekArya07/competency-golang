@@ -17,3 +17,13 @@ func (ProficiencyDao) AddProficiency(proficiency *model.Proficiency, tx *gorm.DB
 	}
 	return result.Error
 }
+
+func (ProficiencyDao) GetProficiencyByBehaveId(id string) (data []model.Proficiency, e error) {
+	defer config.CatchError(&e)
+	var listProfi = []model.Proficiency{}
+	result := g.Where("behave_id = ? ", id).Find(&listProfi)
+	if result.Error == nil {
+		return listProfi, nil
+	}
+	return data, result.Error
+}
