@@ -26,7 +26,7 @@ func (CompetencyService) AddCompetency(pojoCompetency *pojo.PojoCompetency) (e e
 	defer config.CatchError(&e)
 	return g.Transaction(func(tx *gorm.DB) error {
 		competency := pojoCompetency.Competency
-		if err := competencyDao.AddCompetency(&competency, tx); err != nil {
+		if err := baseDao.AddTransaction(&competency, tx); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -35,13 +35,13 @@ func (CompetencyService) AddCompetency(pojoCompetency *pojo.PojoCompetency) (e e
 			for _, v := range pojoCompetency.ListBehaviour {
 				behave := v.Behaviour
 				behave.CompetencyID = competency.Id
-				if err := behaviourService.AddBehaviour(&behave, tx); err != nil {
+				if err := baseDao.AddTransaction(&behave, tx); err != nil {
 					tx.Rollback()
 					return err
 				}
 				for _, f := range v.ListProficiency {
 					f.BehaviourID = behave.Id
-					if err := proficiencyService.AddProficiency(&f, tx); err != nil {
+					if err := baseDao.AddTransaction(&f, tx); err != nil {
 						tx.Rollback()
 						return err
 					}
@@ -52,7 +52,7 @@ func (CompetencyService) AddCompetency(pojoCompetency *pojo.PojoCompetency) (e e
 		if len(pojoCompetency.ListBehaviour) != 0 {
 			for _, concern := range pojoCompetency.ListConcern {
 				concern.CompetencyID = competency.Id
-				if err := concernService.AddConcern(&concern, tx); err != nil {
+				if err := baseDao.AddTransaction(&concern, tx); err != nil {
 					tx.Rollback()
 					return err
 				}
@@ -64,7 +64,7 @@ func (CompetencyService) AddCompetency(pojoCompetency *pojo.PojoCompetency) (e e
 				trainingDetail := model.TrainingDetail{}
 				trainingDetail.TrainingID = t.Id
 				trainingDetail.CompetencyID = competency.Id
-				if err := trainingDetailService.AddTrainingDetail(&trainingDetail, tx); err != nil {
+				if err := baseDao.AddTransaction(&trainingDetail, tx); err != nil {
 					tx.Rollback()
 					return err
 				}
@@ -74,7 +74,7 @@ func (CompetencyService) AddCompetency(pojoCompetency *pojo.PojoCompetency) (e e
 		if len(pojoCompetency.ListNonTraining) != 0 {
 			for _, non := range pojoCompetency.ListNonTraining {
 				non.CompetencyID = competency.Id
-				if err := nonTrainingService.AddTraining(&non, tx); err != nil {
+				if err := baseDao.AddTransaction(&non, tx); err != nil {
 					tx.Rollback()
 					return err
 				}

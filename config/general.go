@@ -4,6 +4,7 @@ import (
 	"competency/model"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/labstack/echo"
 )
@@ -18,6 +19,12 @@ func CatchErrorToken(token []string, e *error) error {
 		return errors.New("token requ")
 	}
 	return nil
+}
+
+func CatchErrorGeneral() {
+	if err := recover(); err != nil {
+		log.Println("Error =>", err)
+	}
 }
 
 func ValToken(c echo.Context) error {

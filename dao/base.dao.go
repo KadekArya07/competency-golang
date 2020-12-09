@@ -2,7 +2,9 @@ package dao
 
 import (
 	"competency/config"
+	"competency/model"
 	"log"
+	"reflect"
 
 	"gorm.io/gorm"
 )
@@ -17,6 +19,11 @@ func SetDao(gDB *gorm.DB) {
 
 func (BaseDao) Add(data interface{}) (e error) {
 	defer config.CatchError(&e)
+	returns := []interface{}{model.BaseModel{CreatedBy: config.GetUser(), UpdatedBy: config.GetUser()}}
+	for i := range returns {
+		val := reflect.ValueOf(returns[i])
+		reflect.ValueOf(data).Elem().FieldByName("BaseModel").Set(val)
+	}
 	result := g.Create(data)
 	if result.Error == nil {
 		return nil
@@ -26,6 +33,15 @@ func (BaseDao) Add(data interface{}) (e error) {
 
 func (BaseDao) AddTransaction(data interface{}, tx *gorm.DB) (e error) {
 	defer config.CatchError(&e)
+	returns := []interface{}{
+		model.BaseModel{
+			CreatedBy: config.GetUser(),
+			UpdatedBy: config.GetUser()}}
+
+	for i := range returns {
+		val := reflect.ValueOf(returns[i])
+		reflect.ValueOf(data).Elem().FieldByName("BaseModel").Set(val)
+	}
 	result := tx.Create(data)
 	if result.Error == nil {
 		return nil

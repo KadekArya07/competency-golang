@@ -30,6 +30,7 @@ func main() {
 	controller.SetLov(url)
 	controller.SetJob(url)
 	controller.SetEmployee(url)
+	controller.SetTraining(url)
 	e.Logger.Fatal(e.Start(":1234"))
 }
 

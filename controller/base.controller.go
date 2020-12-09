@@ -2,11 +2,15 @@ package controller
 
 import (
 	"competency/config"
+	"competency/service"
 	"net/http"
 	"strconv"
 
 	"github.com/labstack/echo"
 )
+
+var competencyLovService = service.CompetencyLovService{}
+var trainingService = service.TrainingService{}
 
 func SetInit(e *echo.Echo) {
 	e.GET("/", func(c echo.Context) error {

@@ -22,10 +22,10 @@ var tables = []interface{}{
 }
 
 const (
-	host     = "103.30.180.34"
-	port     = 9595
+	host     = "localhost"
+	port     = 5432
 	user     = "postgres"
-	password = "bootlawen123"
+	password = "1234"
 	dbname   = "competency_hr"
 	sslmode  = "disable"
 )

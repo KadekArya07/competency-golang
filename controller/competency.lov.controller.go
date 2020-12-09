@@ -2,7 +2,6 @@ package controller
 
 import (
 	"competency/model"
-	"competency/service"
 
 	"github.com/labstack/echo"
 )
@@ -12,9 +11,6 @@ func SetLov(e *echo.Group) {
 	e.GET("/lov/training", getLovTraining)
 	e.GET("/lov/compty", getCompetencyLov)
 }
-
-var competencyLovService = service.CompetencyLovService{}
-var trainingService = service.TrainingService{}
 
 func addLovCompetency(c echo.Context) (e error) {
 	defer catchError(&e)
